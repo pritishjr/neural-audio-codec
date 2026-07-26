@@ -9,6 +9,10 @@ import torch.nn.functional as F
 from torch.nn.utils.parametrizations import weight_norm
 
 class CausalConv(nn.Module):
+    '''
+    Purpose: Causal padding.
+    because symmetric padding/shifting by (k-1)/2 will result in leaks of future context.
+    '''
     
     def __init__(
         self,
@@ -47,7 +51,9 @@ class CausalConv(nn.Module):
         return self.conv(x)
     
 class CausalConvTranspose(nn.Module):
-    #to 
+    '''
+    Purpose: to downsample (used in encoder) with kernel alignment. k = 2*Smax
+    '''
     
     def __init__(
         self,

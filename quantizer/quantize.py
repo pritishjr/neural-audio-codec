@@ -1,4 +1,7 @@
 
+#mathematical modelling of the quantizing algorithm.
+#(bits and pieces taken from kyutai-mimi blog)
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -70,7 +73,7 @@ class VectorQuantizer(nn.Module):
         therefore we fake it with- straight-through estimator (STE) which we apply to the z-q.
         we also detach it (using .detach())- detaches from the autograd engine. no gradient updates for this vector in the training loop. that term becomes a CONSTANT basically. 
         '''
-        #STE:
+        #STE: (from kyutai - mimi)
         z_q = z + (z_q - z).detach()
         
         #updating codebook to match the vector
