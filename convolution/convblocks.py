@@ -18,10 +18,10 @@ class CausalConv(nn.Module):
         self,
         in_dim: int,
         out_dim: int,
-        stride: int = 1,
-        kernel_size: int = 1,
-        dilation: int = 1,
-        groups: int = 1 #?
+        stride: int = 1, #default
+        kernel_size: int = 1, #default
+        dilation: int = 1, #default
+        groups: int = 1 #default
     ):
         super().__init__()
         
