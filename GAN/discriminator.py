@@ -8,6 +8,7 @@
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.nn.utils.parametrizations import weight_norm
 
 
@@ -80,7 +81,7 @@ class NonCausalDiscriminator(nn.Module):
                             bias=True,
                         )
                     ),
-                    nn.LeakyReLU(negative_slope=leaky_relu_slope, inplace=False),
+                    #nn.LeakyReLU(negative_slope=leaky_relu_slope, inplace=False),
                 )
             )
 
@@ -110,11 +111,15 @@ class NonCausalDiscriminator(nn.Module):
             raise ValueError("Input sequence must contain at least one timestep")
 
         features = x
+        fmaps = []
         for block in self.blocks:
             features = block(features)
+            features = F.leaky_relu(features, self.leaky_relu_slope)
+            fmaps.append(features)
 
-        pooled = self.pool(features).flatten(1)
-        return self.classifier(pooled)
+        pooled = self.pool(features).flatten(1) #score
+        
+        return self.classifier(pooled), fmaps
 
 
 __all__ = ["NonCausalDiscriminator"]
